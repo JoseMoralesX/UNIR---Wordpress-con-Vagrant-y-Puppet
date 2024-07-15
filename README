@@ -1,0 +1,38 @@
+Paso 1: Verificar y Configurar el Usuario wp_user en MySQL
+Conéctate a MySQL como root:
+
+sh
+Copiar código
+sudo mysql -u root
+Seleccionar la Base de Datos mysql:
+
+sql
+Copiar código
+USE mysql;
+Verificar la Información del Usuario wp_user:
+
+sql
+Copiar código
+SELECT host, user, authentication_string FROM user WHERE user = 'wp_user';
+Esto mostrará la configuración actual del usuario wp_user. Si ves algún problema con la configuración de la contraseña, sigue los siguientes pasos.
+
+Eliminar y Re-crear el Usuario wp_user:
+
+sql
+Copiar código
+DROP USER 'wp_user'@'localhost';
+CREATE USER 'wp_user'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON wordpress.* TO 'wp_user'@'localhost';
+FLUSH PRIVILEGES;
+
+Paso 3: Reiniciar Servicios
+Reiniciar MySQL:
+
+sh
+Copiar código
+sudo systemctl restart mysql
+Reiniciar NGINX:
+
+sh
+Copiar código
+sudo systemctl restart nginx
