@@ -1,9 +1,11 @@
-Paso 1: Verificar y Configurar el Usuario wp_user en MySQL
-Conéctate a MySQL como root:
+##Paso 1: Verificar y Configurar el Usuario wp_user en MySQL
 
-sh
+Conéctate a MySQL como root:
+```sh
 Copiar código
 sudo mysql -u root
+```
+
 Seleccionar la Base de Datos mysql:
 
 sql
