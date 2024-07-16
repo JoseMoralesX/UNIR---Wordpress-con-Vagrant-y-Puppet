@@ -1,40 +1,130 @@
-##Paso 1: Verificar y Configurar el Usuario wp_user en MySQL
+# Configuración de WordPress con Vagrant, Puppet, Nginx, PHP y MySQL
+
+Este repositorio contiene una configuración automatizada para instalar y configurar WordPress utilizando Vagrant y Puppet. La configuración incluye la instalación de Nginx, PHP y MySQL, y la configuración de un entorno de desarrollo de WordPress accesible en `http://192.168.50.20`.
+
+## Requisitos Previos
+
+Antes de comenzar, asegúrate de tener instalados los siguientes componentes en tu máquina:
+
+- [VirtualBox](https://www.virtualbox.org/)
+- [Vagrant](https://www.vagrantup.com/)
+
+## Estructura del Proyecto
+
+La estructura de directorios del proyecto es la siguiente:
+
+wordpress-vagrant/
+├── Vagrantfile
+├── manifests/
+│ └── site.pp
+├── modules/
+│ ├── nginx/
+│ │ ├── manifests/
+│ │ │ └── init.pp
+│ │ └── templates/
+│ │ └── default.erb
+│ ├── php/
+│ │ └── manifests/
+│ │ └── init.pp
+│ ├── mysql/
+│ │ └── manifests/
+│ │ └── init.pp
+│ └── wordpress/
+│ ├── manifests/
+│ │ └── init.pp
+│ └── templates/
+│ └── wp-config.php.erb
+
+
+
+## Configuración y Uso
+
+### 1. Clonar el Repositorio
+
+Clona este repositorio en tu máquina local:
+
+```sh
+git clone https://github.com/tu_usuario/wordpress-vagrant.git
+cd wordpress-vagrant
+
+
+2. Destruir cualquier VM existente (opcional)
+Si tienes una máquina virtual existente y quieres empezar desde cero, puedes destruirla con el siguiente comando:
+
+
+vagrant destroy -f
+
+
+3. Iniciar y Provisionar la VM
+Para crear y provisionar la máquina virtual, ejecuta:
+
+vagrant up
+
+
+4. Acceder a WordPress
+Una vez que el proceso de aprovisionamiento haya terminado, abre tu navegador y visita:
+
+http://192.168.50.20
+
+
+Deberías ver la página de instalación de WordPress.
+
+Comandos Adicionales
+Reiniciar Servicios Manualmente
+Si necesitas reiniciar los servicios de MySQL o Nginx manualmente, puedes conectarte a la VM y ejecutar los siguientes comandos:
+
+vagrant ssh
+sudo systemctl restart mysql
+sudo systemctl restart nginx
+
+Borrar Caché de Vagrant
+Si necesitas borrar la caché de Vagrant, puedes hacerlo con el siguiente comando:
+
+vagrant box prune
+
+Destruir y Recrear la VM
+Para destruir y recrear la máquina virtual, ejecuta:
+
+vagrant destroy -f
+vagrant up
+
+
+Solución de Problemas
+Si encuentras problemas con la creación del usuario wp_user en MySQL, puedes seguir estos pasos manualmente para solucionarlo:
 
 Conéctate a MySQL como root:
-```sh
-Copiar código
+
 sudo mysql -u root
-```
 
-Seleccionar la Base de Datos mysql:
+Selecciona la base de datos mysql:
 
-sql
-Copiar código
 USE mysql;
-Verificar la Información del Usuario wp_user:
 
-sql
-Copiar código
+Verifica la información del usuario wp_user:
+
 SELECT host, user, authentication_string FROM user WHERE user = 'wp_user';
-Esto mostrará la configuración actual del usuario wp_user. Si ves algún problema con la configuración de la contraseña, sigue los siguientes pasos.
 
-Eliminar y Re-crear el Usuario wp_user:
+Si el usuario no existe, créalo y otorga los privilegios necesarios:
 
-sql
-Copiar código
-DROP USER 'wp_user'@'localhost';
 CREATE USER 'wp_user'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON wordpress.* TO 'wp_user'@'localhost';
 FLUSH PRIVILEGES;
 
-Paso 3: Reiniciar Servicios
-Reiniciar MySQL:
 
-sh
-Copiar código
+Sal de MySQL:
+
+exit;
+
+Reinicia los servicios:
+
 sudo systemctl restart mysql
-Reiniciar NGINX:
-
-sh
-Copiar código
 sudo systemctl restart nginx
+
+
+ añade y confirma los cambios en Git:
+
+```sh
+git add README.md
+git commit -m "Añadir archivo README con instrucciones de uso"
+git push origin main
+
