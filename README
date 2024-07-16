@@ -46,7 +46,7 @@ Clona este repositorio en tu máquina local:
 ```sh
 git clone https://github.com/tu_usuario/wordpress-vagrant.git
 cd wordpress-vagrant
-
+```
 
 2. Destruir cualquier VM existente (opcional)
 Si tienes una máquina virtual existente y quieres empezar desde cero, puedes destruirla con el siguiente comando:
@@ -89,42 +89,48 @@ vagrant destroy -f
 vagrant up
 
 
-Solución de Problemas
+## Solución de Problemas
 Si encuentras problemas con la creación del usuario wp_user en MySQL, puedes seguir estos pasos manualmente para solucionarlo:
 
-Conéctate a MySQL como root:
+##Conéctate a MySQL como root:
 
+```sh
 sudo mysql -u root
+```
+## Selecciona la base de datos mysql:
 
-Selecciona la base de datos mysql:
-
+```sh
 USE mysql;
+```
+## Verifica la información del usuario wp_user:
 
-Verifica la información del usuario wp_user:
-
+```sh
 SELECT host, user, authentication_string FROM user WHERE user = 'wp_user';
+```
+## Si el usuario no existe, créalo y otorga los privilegios necesarios:
 
-Si el usuario no existe, créalo y otorga los privilegios necesarios:
-
+```sh
 CREATE USER 'wp_user'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON wordpress.* TO 'wp_user'@'localhost';
 FLUSH PRIVILEGES;
+```
 
+## Sal de MySQL:
 
-Sal de MySQL:
-
+```sh
 exit;
+```
+## Reinicia los servicios:
 
-Reinicia los servicios:
-
+```sh
 sudo systemctl restart mysql
 sudo systemctl restart nginx
+```
 
-
- añade y confirma los cambios en Git:
+## Añade y confirma los cambios en Git:
 
 ```sh
 git add README.md
 git commit -m "Añadir archivo README con instrucciones de uso"
 git push origin main
-
+```
